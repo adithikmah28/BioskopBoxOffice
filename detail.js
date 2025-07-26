@@ -22,11 +22,6 @@ const movieIframe = document.getElementById('movie-iframe');
 const adTimerModal = document.getElementById('ad-timer-modal');
 const adTimerCountdown = document.getElementById('ad-timer-countdown');
 const adTimerContinueBtn = document.getElementById('ad-timer-continue-btn');
-const requestBtnFloating = document.getElementById('request-btn-floating');
-const requestModal = document.getElementById('request-modal');
-const closeRequestModalBtn = document.getElementById('close-request-modal');
-const requestForm = document.getElementById('request-form');
-const formStatus = document.getElementById('form-status');
 
 let countdownInterval;
 let onContinueAction;
@@ -60,8 +55,8 @@ adTimerContinueBtn.addEventListener('click', () => {
 });
 
 function updateMetaTags(content) {
-    const title = `${content.title || content.name} - Nonton di CineBro`;
-    const description = content.overview ? content.overview.substring(0, 155).trim() + '...' : `Nonton atau download ${title} dengan subtitle Indonesia gratis hanya di CineBro.`;
+    const title = `${content.title || content.name} - CineBro`;
+    const description = content.overview ? content.overview.substring(0, 155).trim() + '...' : `Nonton ${title} dengan subtitle Indonesia gratis.`;
     const imageUrl = content.backdrop_path ? BACKDROP_URL + content.backdrop_path : IMG_URL + content.poster_path;
     document.title = title;
     document.querySelector('meta[name="description"]').setAttribute('content', description);
@@ -88,7 +83,7 @@ async function loadDetailPage() {
         if (typeof customData !== 'undefined' && customData[contentId] && customData[contentId].synopsis) {
             data.overview = customData[contentId].synopsis;
         } else if (!data.overview) {
-             const englishResponse = await fetch(`${BASE_URL}${endpoint}?api_key=${API_KEY}&language=en-US`);
+            const englishResponse = await fetch(`${BASE_URL}${endpoint}?api_key=${API_KEY}&language=en-US`);
             const englishData = await englishResponse.json();
             data.overview = englishData.overview || "Sinopsis untuk film ini belum tersedia.";
         }
@@ -177,38 +172,6 @@ function displayActors(cast) {
     detailMainContent.appendChild(actorsSection);
 }
 
-// Event Listener untuk Buka/Tutup & Kirim Form
-requestBtnFloating.addEventListener('click', () => { requestModal.style.display = 'flex'; });
-closeRequestModalBtn.addEventListener('click', () => { requestModal.style.display = 'none'; });
-requestModal.addEventListener('click', (e) => { if (e.target === requestModal) { requestModal.style.display = 'none'; } });
-
-requestForm.addEventListener('submit', async function(event) {
-    event.preventDefault();
-    const form = event.target;
-    const data = new FormData(form);
-    const submitButton = form.querySelector('button');
-    formStatus.textContent = 'Mengirim...';
-    formStatus.className = '';
-    submitButton.disabled = true;
-    try {
-        const response = await fetch(form.action, { method: form.method, body: data, headers: { 'Accept': 'application/json' } });
-        if (response.ok) {
-            formStatus.textContent = "Terima kasih! Request Anda telah terkirim.";
-            formStatus.classList.add('success');
-            form.reset();
-        } else {
-            formStatus.textContent = "Oops! Terjadi kesalahan saat mengirim formulir.";
-            formStatus.classList.add('error');
-        }
-    } catch (error) {
-        formStatus.textContent = "Oops! Terjadi kesalahan jaringan.";
-        formStatus.classList.add('error');
-    } finally {
-        submitButton.disabled = false;
-        setTimeout(() => { formStatus.textContent = ''; formStatus.className = ''; }, 5000);
-    }
-});
-
 closeModalBtn.addEventListener('click', () => {
     movieIframe.src = ''; 
     videoModal.style.display = 'none';
@@ -216,8 +179,3 @@ closeModalBtn.addEventListener('click', () => {
 });
 
 document.addEventListener('DOMContentLoaded', loadDetailPage);
-
-// ==========================================================
-// == PERBAIKAN UTAMA: BARIS INI DITAMBAHKAN KEMBALI       ==
-// ==========================================================
-requestForm.action = 'https://formspree.io/f/manboaen';
