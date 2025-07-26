@@ -22,11 +22,11 @@ const movieIframe = document.getElementById('movie-iframe');
 const adTimerModal = document.getElementById('ad-timer-modal');
 const adTimerCountdown = document.getElementById('ad-timer-countdown');
 const adTimerContinueBtn = document.getElementById('ad-timer-continue-btn');
+const requestBtnFloating = document.getElementById('request-btn-floating');
 const requestModal = document.getElementById('request-modal');
 const closeRequestModalBtn = document.getElementById('close-request-modal');
 const requestForm = document.getElementById('request-form');
 const formStatus = document.getElementById('form-status');
-
 
 let countdownInterval;
 let onContinueAction;
@@ -101,6 +101,7 @@ async function loadDetailPage() {
         displayActors(finalContent.credits.cast);
     } catch (error) {
         console.error("Error:", error);
+        document.title = "Error - CineBro";
         movieDetailHero.innerHTML = `<h1>Error memuat data.</h1>`;
         detailMainContent.innerHTML = '';
     }
@@ -124,14 +125,10 @@ function displayHeroDetail(content) {
             <p class="overview">${content.overview}</p>
             <div class="action-buttons">
                 <a href="#" class="action-btn play-btn" id="play-btn" data-id="${content.id}" data-type="${content.type}"><i class="fas fa-play"></i> Tonton Sekarang</a>
-                <button class="action-btn request-btn" id="request-btn"><i class="fas fa-paper-plane"></i> Request/Report</button>
             </div>
         </div>
     `;
     document.getElementById('play-btn').addEventListener('click', handlePlayClick);
-    document.getElementById('request-btn').addEventListener('click', () => {
-        requestModal.style.display = 'flex';
-    });
 }
 
 function handlePlayClick(e) {
@@ -180,8 +177,11 @@ function displayActors(cast) {
     detailMainContent.appendChild(actorsSection);
 }
 
+// Event Listener untuk Buka/Tutup & Kirim Form
+requestBtnFloating.addEventListener('click', () => { requestModal.style.display = 'flex'; });
 closeRequestModalBtn.addEventListener('click', () => { requestModal.style.display = 'none'; });
 requestModal.addEventListener('click', (e) => { if (e.target === requestModal) { requestModal.style.display = 'none'; } });
+
 requestForm.addEventListener('submit', async function(event) {
     event.preventDefault();
     const form = event.target;
@@ -216,4 +216,8 @@ closeModalBtn.addEventListener('click', () => {
 });
 
 document.addEventListener('DOMContentLoaded', loadDetailPage);
+
+// ==========================================================
+// == PERBAIKAN UTAMA: BARIS INI DITAMBAHKAN KEMBALI       ==
+// ==========================================================
 requestForm.action = 'https://formspree.io/f/manboaen';
