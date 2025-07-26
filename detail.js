@@ -27,9 +27,62 @@ const adTimerContinueBtn = document.getElementById('ad-timer-continue-btn');
 let countdownInterval;
 let onContinueAction;
 
-function startAdCountdown(actionAfterAd) { /* ... (fungsi ini sama) ... */ }
-adTimerContinueBtn.addEventListener('click', () => { /* ... (fungsi ini sama) ... */ });
-function updateMetaTags(content) { /* ... (fungsi ini sama) ... */ }
+function startAdCountdown(actionAfterAd) {
+    onContinueAction = actionAfterAd;
+    const randomIndex = Math.floor(Math.random() * ADSTERRA_DIRECT_LINKS.length);
+    const selectedDirectLink = ADSTERRA_DIRECT_LINKS[randomIndex];
+    window.open(selectedDirectLink, '_blank');
+    adTimerModal.style.display = 'flex';
+    adTimerContinueBtn.style.display = 'none';
+    adTimerCountdown.style.display = 'block';
+    let secondsLeft = COUNTDOWN_SECONDS;
+    adTimerCountdown.innerHTML = `Link akan terbuka dalam <span>${secondsLeft}</span> detik...`;
+    countdownInterval = setInterval(() => {
+        secondsLeft--;
+        if (secondsLeft > 0) {
+            adTimerCountdown.querySelector('span').textContent = secondsLeft;
+        } else {
+            clearInterval(countdownInterval);
+            adTimerCountdown.style.display = 'none';
+            adTimerContinueBtn.style.display = 'inline-block';
+        }
+    }, 1000);
+}
+
+adTimerContinueBtn.addEventListener('click', () => {
+    adTimerModal.style.display = 'none';
+    clearInterval(countdownInterval);
+    if (typeof onContinueAction === 'function') { onContinueAction(); }
+});
+
+// ==========================================================
+// == FUNGSI UPDATE META TAGS & JUDUL YANG DISEMPURNAKAN   ==
+// ==========================================================
+function updateMetaTags(content) {
+    const title = content.title || content.name;
+    const year = content.release_date ? `(${new Date(content.release_date).getFullYear()})` : (content.first_air_date ? `(${new Date(content.first_air_date).getFullYear()})` : '');
+    
+    // Format judul halaman yang baru dan SEO friendly
+    const pageTitle = `Nonton ${title} ${year} Sub Indo - BioskopBoxOffice`;
+    const ogTitle = `${title} ${year}`;
+    const description = `Nonton streaming ${title} ${year} subtitle Indonesia gratis. ${content.overview ? content.overview.substring(0, 100).trim() + '...' : 'Hanya di CineBro.'}`;
+    const imageUrl = content.backdrop_path ? BACKDROP_URL + content.backdrop_path : IMG_URL + content.poster_path;
+
+    document.title = pageTitle;
+    document.querySelector('meta[name="description"]').setAttribute('content', description);
+    
+    // OG Tags
+    document.querySelector('meta[property="og:title"]').setAttribute('content', ogTitle);
+    document.querySelector('meta[property="og:description"]').setAttribute('content', description);
+    document.querySelector('meta[property="og:image"]').setAttribute('content', imageUrl);
+    document.querySelector('meta[property="og:url"]').setAttribute('content', window.location.href);
+
+    // Twitter Tags
+    document.querySelector('meta[property="twitter:title"]').setAttribute('content', ogTitle);
+    document.querySelector('meta[property="twitter:description"]').setAttribute('content', description);
+    document.querySelector('meta[property="twitter:image"]').setAttribute('content', imageUrl);
+}
+
 
 async function loadDetailPage() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -42,21 +95,25 @@ async function loadDetailPage() {
         if (!response.ok) throw new Error('Konten tidak ditemukan.');
         let data = await response.json();
         
-        // Logika untuk menimpa sinopsis
         if (typeof customData !== 'undefined' && customData[contentId] && customData[contentId].synopsis) {
             data.overview = customData[contentId].synopsis;
         } else if (!data.overview) {
-            data.overview = "Sinopsis untuk film ini belum tersedia dalam Bahasa Indonesia.";
+            // Kita ambil sinopsis Inggris sebagai fallback jika Indonesia kosong
+            const englishResponse = await fetch(`${BASE_URL}${endpoint}?api_key=${API_KEY}&language=en-US`);
+            const englishData = await englishResponse.json();
+            data.overview = englishData.overview || "Sinopsis untuk film ini belum tersedia.";
         }
-
+        
         const finalContent = { ...data, type: contentType };
-        updateMetaTags(finalContent);
+        updateMetaTags(finalContent); // Panggil fungsi meta tags
+        
         displayHeroDetail(finalContent);
         detailMainContent.innerHTML = '';
         displayTrailer(finalContent.videos.results);
         displayActors(finalContent.credits.cast);
     } catch (error) {
         console.error("Error:", error);
+        document.title = "Error - CineBro";
         movieDetailHero.innerHTML = `<h1>Error memuat data.</h1>`;
         detailMainContent.innerHTML = '';
     }
