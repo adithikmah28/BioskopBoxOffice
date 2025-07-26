@@ -59,7 +59,7 @@ adTimerContinueBtn.addEventListener('click', () => {
 });
 
 function updateMetaTags(content) {
-    const title = `${content.title || content.name} - CineBro`;
+    const title = `${content.title || content.name} - bioskopboxoffice`;
     const description = content.overview ? content.overview.substring(0, 155).trim() + '...' : `Nonton ${title} dengan subtitle Indonesia gratis.`;
     const imageUrl = content.backdrop_path ? BACKDROP_URL + content.backdrop_path : IMG_URL + content.poster_path;
     document.title = title;
