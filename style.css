@@ -2,9 +2,59 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Poppins', sans-serif; -webkit-font-smoothing: antialiased; background: var(--dark-color); color: var(--light-color); }
 a { color: var(--light-color); text-decoration: none; }
-.simple-page { display: flex; justify-content: center; align-items: center; text-align: center; height: 100vh; }
-.simple-content .logo { font-size: 3rem; margin-bottom: 10px; }
-.simple-content p { font-size: 1.2rem; color: #aaa; }
+
+/* ================================== */
+/* == STYLE HALAMAN UTAMA (GERBANG) == */
+/* ================================== */
+.simple-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100vh;
+    padding: 20px;
+}
+.simple-content {
+    max-width: 600px;
+}
+.logo-main {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+.tagline {
+    font-size: 1.2rem;
+    color: #aaa;
+    margin-bottom: 40px;
+}
+.telegram-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 15px;
+    background-color: #2AABEE; /* Warna khas Telegram */
+    color: white;
+    padding: 15px 30px;
+    border-radius: 50px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    box-shadow: 0 5px 15px rgba(42, 171, 238, 0.3);
+}
+.telegram-button i {
+    font-size: 1.5rem;
+}
+.telegram-button:hover {
+    transform: translateY(-5px);
+    background-color: #1e9de0;
+}
+
+/* ================================ */
+/* == HALAMAN DETAIL & LAINNYA   == */
+/* ================================ */
 .movie-detail-container { width: 100%; }
 #movie-detail-hero { min-height: 80vh; padding: 100px 50px 50px; display: flex; align-items: center; gap: 40px; position: relative; background-size: cover; background-position: center; }
 #movie-detail-hero::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to right, rgba(20, 20, 20, 0.9) 30%, rgba(20, 20, 20, 0.3) 70%, rgba(20, 20, 20, 0.9) 100%), linear-gradient(to top, rgba(20, 20, 20, 1) 10%, transparent 50%); z-index: 1; }
@@ -17,9 +67,8 @@ a { color: var(--light-color); text-decoration: none; }
 .genres { margin-bottom: 20px; }
 .genres .genre-tag { display: inline-block; border: 1px solid #aaa; color: #aaa; padding: 5px 12px; border-radius: 20px; margin-right: 10px; margin-bottom: 10px; font-size: 0.8rem; }
 .overview { font-size: 1rem; line-height: 1.7; color: #ddd; margin-bottom: 30px; }
-/* PERBAIKAN DI SINI */
-.action-buttons { display: flex; justify-content: center; /* Tombol jadi di tengah */ }
-.action-btn { display: flex; align-items: center; gap: 10px; padding: 12px 35px; /* Padding disesuaikan */ border-radius: 8px; font-size: 1.2rem; /* Font diperbesar */ font-weight: 600; cursor: pointer; transition: all 0.3s; }
+.action-buttons { display: flex; justify-content: center; }
+.action-btn { display: flex; align-items: center; gap: 10px; padding: 12px 35px; border-radius: 8px; font-size: 1.2rem; font-weight: 600; cursor: pointer; transition: all 0.3s; }
 .play-btn { background-color: var(--primary-color); color: white; }
 .play-btn:hover { background-color: #f40612; transform: scale(1.05); }
 .detail-main-content { padding: 0 50px; }
@@ -54,6 +103,9 @@ footer p { margin-bottom: 10px; }
 .tmdb-logo { display: flex; justify-content: center; align-items: center; gap: 10px; color: #888; }
 .tmdb-logo img { height: 20px; }
 @media (max-width: 768px) {
+    .logo-main { font-size: 2.5rem; }
+    .tagline { font-size: 1rem; }
+    .telegram-button { font-size: 1rem; padding: 12px 25px; }
     #movie-detail-hero { flex-direction: column; padding: 80px 20px 30px; text-align: center; min-height: auto; }
     .detail-box { max-width: 100%; }
     .detail-box h1 { font-size: 2.2rem; }
