@@ -2,18 +2,17 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Poppins', sans-serif; -webkit-font-smoothing: antialiased; background: var(--dark-color); color: var(--light-color); }
 a { color: var(--light-color); text-decoration: none; }
-
-/* Halaman Utama (Gerbang) */
 .simple-page { display: flex; justify-content: center; align-items: center; text-align: center; height: 100vh; padding: 20px; }
-.simple-content { max-width: 600px; }
-.logo-main { font-size: 3.5rem; font-weight: 700; color: var(--primary-color); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
+.simple-content .logo-main { font-size: 3.5rem; font-weight: 700; color: var(--primary-color); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
 .tagline { font-size: 1.2rem; color: #aaa; margin-bottom: 40px; }
 .telegram-button { display: inline-flex; align-items: center; gap: 15px; background-color: #2AABEE; color: white; padding: 15px 30px; border-radius: 50px; font-size: 1.2rem; font-weight: 700; text-decoration: none; transition: transform 0.3s ease, background-color 0.3s ease; box-shadow: 0 5px 15px rgba(42, 171, 238, 0.3); }
 .telegram-button i { font-size: 1.5rem; }
 .telegram-button:hover { transform: translateY(-5px); background-color: #1e9de0; }
-
-/* Halaman Detail */
-.movie-detail-container { width: 100%; }
+.movie-detail-container { width: 100%; position: relative; }
+.request-btn-floating { position: absolute; top: 30px; right: 50px; z-index: 110; background: rgba(0,0,0,0.5); border: 1px solid var(--grey-color); color: #ccc; padding: 10px 15px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: background-color 0.2s; }
+.request-btn-floating:hover { background-color: var(--grey-color); }
+.request-btn-floating i { color: var(--primary-color); }
+.request-btn-floating span { display: none; }
 #movie-detail-hero { min-height: 80vh; padding: 100px 50px 50px; display: flex; align-items: center; gap: 40px; position: relative; background-size: cover; background-position: center; }
 #movie-detail-hero::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to right, rgba(20, 20, 20, 0.9) 30%, rgba(20, 20, 20, 0.3) 70%, rgba(20, 20, 20, 0.9) 100%), linear-gradient(to top, rgba(20, 20, 20, 1) 10%, transparent 50%); z-index: 1; }
 .poster-box { width: 250px; flex-shrink: 0; z-index: 2; }
@@ -25,12 +24,10 @@ a { color: var(--light-color); text-decoration: none; }
 .genres { margin-bottom: 20px; }
 .genres .genre-tag { display: inline-block; border: 1px solid #aaa; color: #aaa; padding: 5px 12px; border-radius: 20px; margin-right: 10px; margin-bottom: 10px; font-size: 0.8rem; }
 .overview { font-size: 1rem; line-height: 1.7; color: #ddd; margin-bottom: 30px; }
-.action-buttons { display: flex; justify-content: flex-start; gap: 15px; flex-wrap: wrap; }
-.action-btn { display: flex; align-items: center; gap: 10px; padding: 12px 25px; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.3s; border: none; }
+.action-buttons { display: flex; justify-content: flex-start; }
+.action-btn { display: flex; align-items: center; gap: 10px; padding: 12px 35px; border-radius: 8px; font-size: 1.2rem; font-weight: 600; cursor: pointer; transition: all 0.3s; border: none; }
 .play-btn { background-color: var(--primary-color); color: white; }
 .play-btn:hover { background-color: #f40612; transform: scale(1.05); }
-.request-btn { background-color: var(--grey-color); color: #ccc; border: 1px solid #555; }
-.request-btn:hover { background-color: #555; }
 .detail-main-content { padding: 0 50px; }
 .content-section { margin-bottom: 50px; }
 .content-section h2 { font-size: 1.8rem; margin-bottom: 20px; padding-left: 15px; border-left: 4px solid var(--primary-color); }
@@ -42,8 +39,6 @@ a { color: var(--light-color); text-decoration: none; }
 .actor-card img { width: 130px; height: 130px; object-fit: cover; object-position: center top; border-radius: 50%; margin-bottom: 10px; border: 2px solid var(--grey-color); }
 .actor-card h3 { font-size: 1rem; font-weight: 500; }
 .actor-card p { font-size: 0.8rem; color: #aaa; }
-
-/* Modal & Formulir */
 .modal-container { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
 .player-wrapper { display: flex; flex-direction: column; width: 100%; height: 100%; max-width: 1400px; max-height: 90vh; }
 .modal-content { position: relative; width: 100%; height: 100%; background: #000; }
@@ -69,18 +64,16 @@ a { color: var(--light-color); text-decoration: none; }
 .ad-timer-countdown { font-size: 1.1rem; font-weight: 500; margin-top: 20px; }
 .ad-timer-countdown span { font-size: 1.5rem; font-weight: 700; color: var(--primary-color); }
 .ad-timer-button { display: inline-block; background-color: var(--primary-color); color: white; border: none; padding: 12px 40px; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; margin-top: 20px; }
-
-/* Footer */
 footer { text-align: center; padding: 30px 50px; margin-top: 50px; border-top: 1px solid var(--grey-color); }
 footer p { margin-bottom: 10px; }
 .tmdb-logo { display: flex; justify-content: center; align-items: center; gap: 10px; color: #888; }
 .tmdb-logo img { height: 20px; }
-
-/* Responsive */
 @media (max-width: 768px) {
     .logo-main { font-size: 2.5rem; }
     .tagline { font-size: 1rem; }
     .telegram-button { font-size: 1rem; padding: 12px 25px; }
+    .request-btn-floating { top: 20px; right: 20px; }
+    .request-btn-floating span { display: inline; }
     #movie-detail-hero { flex-direction: column; padding: 80px 20px 30px; text-align: center; min-height: auto; }
     .detail-box { max-width: 100%; }
     .detail-box h1 { font-size: 2.2rem; }
