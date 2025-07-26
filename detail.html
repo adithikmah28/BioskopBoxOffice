@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nonton Film Sub Indo - BioksopBoxOffice</title>
+    <title>Detail - BioskopBoxOffice</title>
     <meta name="description" content="Memuat informasi film...">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <meta property="og:type" content="video.movie">
@@ -22,11 +22,14 @@
 </head>
 <body>
     <div class="movie-detail-container">
+        <button class="request-btn-floating" id="request-btn-floating">
+            <i class="fas fa-paper-plane"></i>
+            <span>Request/Report</span>
+        </button>
         <section id="movie-detail-hero"></section>
         <main class="detail-main-content" id="detail-main-content"></main>
     </div>
 
-    <!-- Modal untuk Player Video -->
     <div class="modal-container" id="video-modal">
         <div class="player-wrapper">
             <div class="subtitle-notice">
@@ -41,7 +44,6 @@
         </div>
     </div>
     
-    <!-- Modal untuk Iklan -->
     <div class="modal-container" id="ad-timer-modal">
         <div class="ad-timer-content">
             <div class="ad-timer-icon"><i class="fas fa-shield-alt"></i></div>
@@ -52,13 +54,12 @@
         </div>
     </div>
     
-    <!-- MODAL BARU UNTUK FORMULIR REQUEST -->
     <div class="modal-container" id="request-modal">
         <div class="form-modal-content">
             <span class="close-modal" id="close-request-modal">×</span>
             <h3>Request Film atau Report Masalah</h3>
             <p>Beritahu kami film apa yang kamu inginkan atau jika ada video yang rusak/hilang.</p>
-            <form id="request-form" action="https://formspree.io/f/xxxxxxxx" method="POST">
+            <form id="request-form" action="https://formspree.io/f/manboaen" method="POST">
                 <input type="text" name="Judul Film" placeholder="Judul Film/Serial TV" required>
                 <input type="email" name="Email" placeholder="Email Anda (opsional, untuk notifikasi)" >
                 <textarea name="Pesan" placeholder="Deskripsi masalah atau link IMDB/TMDB (opsional)..." rows="4"></textarea>
