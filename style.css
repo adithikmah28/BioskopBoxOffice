@@ -2,6 +2,9 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Poppins', sans-serif; -webkit-font-smoothing: antialiased; background: var(--dark-color); color: var(--light-color); }
 a { color: var(--light-color); text-decoration: none; }
+.simple-page { display: flex; justify-content: center; align-items: center; text-align: center; height: 100vh; }
+.simple-content .logo { font-size: 3rem; margin-bottom: 10px; }
+.simple-content p { font-size: 1.2rem; color: #aaa; }
 .movie-detail-container { width: 100%; }
 #movie-detail-hero { min-height: 80vh; padding: 100px 50px 50px; display: flex; align-items: center; gap: 40px; position: relative; background-size: cover; background-position: center; }
 #movie-detail-hero::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to right, rgba(20, 20, 20, 0.9) 30%, rgba(20, 20, 20, 0.3) 70%, rgba(20, 20, 20, 0.9) 100%), linear-gradient(to top, rgba(20, 20, 20, 1) 10%, transparent 50%); z-index: 1; }
@@ -14,10 +17,11 @@ a { color: var(--light-color); text-decoration: none; }
 .genres { margin-bottom: 20px; }
 .genres .genre-tag { display: inline-block; border: 1px solid #aaa; color: #aaa; padding: 5px 12px; border-radius: 20px; margin-right: 10px; margin-bottom: 10px; font-size: 0.8rem; }
 .overview { font-size: 1rem; line-height: 1.7; color: #ddd; margin-bottom: 30px; }
-.action-buttons { display: flex; gap: 15px; flex-wrap: wrap; }
-.action-btn { display: flex; align-items: center; gap: 10px; padding: 12px 25px; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+/* PERBAIKAN DI SINI */
+.action-buttons { display: flex; justify-content: center; /* Tombol jadi di tengah */ }
+.action-btn { display: flex; align-items: center; gap: 10px; padding: 12px 35px; /* Padding disesuaikan */ border-radius: 8px; font-size: 1.2rem; /* Font diperbesar */ font-weight: 600; cursor: pointer; transition: all 0.3s; }
 .play-btn { background-color: var(--primary-color); color: white; }
-.play-btn:hover { background-color: #f40612; }
+.play-btn:hover { background-color: #f40612; transform: scale(1.05); }
 .detail-main-content { padding: 0 50px; }
 .content-section { margin-bottom: 50px; }
 .content-section h2 { font-size: 1.8rem; margin-bottom: 20px; padding-left: 15px; border-left: 4px solid var(--primary-color); }
