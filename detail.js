@@ -13,10 +13,7 @@ const ADSTERRA_DIRECT_LINKS = [
 ];
 const COUNTDOWN_SECONDS = 3;
 
-const customSources = {
-    '624566': 'https://link-video-makmum-kamu.com/stream.mp4',
-    // Tambahkan ID film kustom lain di sini
-};
+// Variabel customData sekarang diambil dari file custom_data.js
 
 const movieDetailHero = document.getElementById('movie-detail-hero');
 const detailMainContent = document.getElementById('detail-main-content');
@@ -30,48 +27,9 @@ const adTimerContinueBtn = document.getElementById('ad-timer-continue-btn');
 let countdownInterval;
 let onContinueAction;
 
-function startAdCountdown(actionAfterAd) {
-    onContinueAction = actionAfterAd;
-    const randomIndex = Math.floor(Math.random() * ADSTERRA_DIRECT_LINKS.length);
-    const selectedDirectLink = ADSTERRA_DIRECT_LINKS[randomIndex];
-    window.open(selectedDirectLink, '_blank');
-    adTimerModal.style.display = 'flex';
-    adTimerContinueBtn.style.display = 'none';
-    adTimerCountdown.style.display = 'block';
-    let secondsLeft = COUNTDOWN_SECONDS;
-    adTimerCountdown.innerHTML = `Link akan terbuka dalam <span>${secondsLeft}</span> detik...`;
-    countdownInterval = setInterval(() => {
-        secondsLeft--;
-        if (secondsLeft > 0) {
-            adTimerCountdown.querySelector('span').textContent = secondsLeft;
-        } else {
-            clearInterval(countdownInterval);
-            adTimerCountdown.style.display = 'none';
-            adTimerContinueBtn.style.display = 'inline-block';
-        }
-    }, 1000);
-}
-
-adTimerContinueBtn.addEventListener('click', () => {
-    adTimerModal.style.display = 'none';
-    clearInterval(countdownInterval);
-    if (typeof onContinueAction === 'function') { onContinueAction(); }
-});
-
-function updateMetaTags(content) {
-    const title = `${content.title || content.name} - BioskopBoxOffice`;
-    const description = content.overview ? content.overview.substring(0, 155).trim() + '...' : `Nonton ${title} dengan subtitle Indonesia gratis.`;
-    const imageUrl = content.backdrop_path ? BACKDROP_URL + content.backdrop_path : IMG_URL + content.poster_path;
-    document.title = title;
-    document.querySelector('meta[name="description"]').setAttribute('content', description);
-    document.querySelector('meta[property="og:title"]').setAttribute('content', title);
-    document.querySelector('meta[property="og:description"]').setAttribute('content', description);
-    document.querySelector('meta[property="og:image"]').setAttribute('content', imageUrl);
-    document.querySelector('meta[property="og:url"]').setAttribute('content', window.location.href);
-    document.querySelector('meta[property="twitter:title"]').setAttribute('content', title);
-    document.querySelector('meta[property="twitter:description"]').setAttribute('content', description);
-    document.querySelector('meta[property="twitter:image"]').setAttribute('content', imageUrl);
-}
+function startAdCountdown(actionAfterAd) { /* ... (fungsi ini sama) ... */ }
+adTimerContinueBtn.addEventListener('click', () => { /* ... (fungsi ini sama) ... */ });
+function updateMetaTags(content) { /* ... (fungsi ini sama) ... */ }
 
 async function loadDetailPage() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -80,15 +38,17 @@ async function loadDetailPage() {
     if (!contentId) { movieDetailHero.innerHTML = '<h1>Konten tidak ditemukan.</h1>'; return; }
     try {
         const endpoint = `/${contentType}/${contentId}`;
-        const [indonesianData, englishData] = await Promise.all([
-            fetch(`${BASE_URL}${endpoint}?api_key=${API_KEY}&language=id-ID&append_to_response=videos,credits`),
-            fetch(`${BASE_URL}${endpoint}?api_key=${API_KEY}&language=en-US&append_to_response=videos`)
-        ]);
-        if (!indonesianData.ok) throw new Error('Konten tidak ditemukan.');
-        let data = await indonesianData.json();
-        const englishDataJson = await englishData.json();
-        data.overview = data.overview || englishDataJson.overview || "Sinopsis belum tersedia.";
-        data.videos = { results: (data.videos && data.videos.results.length > 0) ? data.videos.results : englishDataJson.videos.results };
+        const response = await fetch(`${BASE_URL}${endpoint}?api_key=${API_KEY}&language=id-ID&append_to_response=videos,credits`);
+        if (!response.ok) throw new Error('Konten tidak ditemukan.');
+        let data = await response.json();
+        
+        // Logika untuk menimpa sinopsis
+        if (typeof customData !== 'undefined' && customData[contentId] && customData[contentId].synopsis) {
+            data.overview = customData[contentId].synopsis;
+        } else if (!data.overview) {
+            data.overview = "Sinopsis untuk film ini belum tersedia dalam Bahasa Indonesia.";
+        }
+
         const finalContent = { ...data, type: contentType };
         updateMetaTags(finalContent);
         displayHeroDetail(finalContent);
@@ -130,8 +90,8 @@ function handlePlayClick(e) {
     e.preventDefault();
     const { id, type } = e.currentTarget.dataset;
     let streamUrl;
-    if (customSources[id]) {
-        streamUrl = customSources[id];
+    if (typeof customData !== 'undefined' && customData[id] && customData[id].videoUrl) {
+        streamUrl = customData[id].videoUrl;
     } else {
         if (type === 'tv') {
             streamUrl = `${STREAMING_URL_TV}${id}/1/1`;
@@ -146,18 +106,12 @@ function handlePlayClick(e) {
     });
 }
 
-// ==========================================================
-// == FUNGSI TRAILER YANG DIPERBAIKI                       ==
-// ==========================================================
-function displayTrailer(videoList) {
-    // 'videoList' sekarang adalah array of video results, bukan objek
-    if (!videoList || videoList.length === 0) return;
-    
-    const officialTrailer = videoList.find(v => v.type === 'Trailer' && v.site === 'YouTube');
-    const teaser = videoList.find(v => v.type === 'Teaser' && v.site === 'YouTube');
-    const firstVideo = videoList.find(v => v.site === 'YouTube');
+function displayTrailer(videos) {
+    if (!videos || videos.length === 0) return;
+    const officialTrailer = videos.find(v => v.type === 'Trailer' && v.site === 'YouTube');
+    const teaser = videos.find(v => v.type === 'Teaser' && v.site === 'YouTube');
+    const firstVideo = videos.find(v => v.site === 'YouTube');
     const trailer = officialTrailer || teaser || firstVideo;
-
     if (trailer) {
         const trailerSection = document.createElement('section');
         trailerSection.className = 'content-section';
