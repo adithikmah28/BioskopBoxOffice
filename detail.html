@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memuat... - CineBro</title>
+    <meta name="description" content="Memuat informasi film...">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <meta property="og:type" content="video.movie">
+    <meta property="og:url" content="">
+    <meta property="og:title" content="Memuat...">
+    <meta property="og:description" content="Memuat informasi film...">
+    <meta property="og:image" content="">
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="">
+    <meta property="twitter:title" content="Memuat...">
+    <meta property="twitter:description" content="Memuat informasi film...">
+    <meta property="twitter:image" content="">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="movie-detail-container">
+        <section id="movie-detail-hero"></section>
+        <main class="detail-main-content" id="detail-main-content">
+            <!-- Konten (Trailer, Aktor) akan disisipkan di sini oleh JavaScript -->
+        </main>
+    </div>
+
+    <div class="modal-container" id="video-modal">
+        <div class="player-wrapper">
+            <div class="subtitle-notice">
+                <p><i class="fas fa-info-circle"></i> Subtitle tidak sinkron? Coba muat ulang halaman atau gunakan subtitle bawaan player.</p>
+            </div>
+            <div class="modal-content">
+                <span class="close-modal" id="close-video-modal">×</span>
+                <div class="iframe-wrapper">
+                    <iframe id="movie-iframe" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-container" id="ad-timer-modal">
+        <div class="ad-timer-content">
+            <div class="ad-timer-icon"><i class="fas fa-shield-alt"></i></div>
+            <h3>Verifikasi Sesi Anda</h3>
+            <p>Silakan tunggu, link Anda sedang disiapkan.</p>
+            <div class="ad-timer-countdown" id="ad-timer-countdown"></div>
+            <button class="ad-timer-button" id="ad-timer-continue-btn" style="display: none;">Lanjutkan</button>
+        </div>
+    </div>
+    
+    <footer>
+        <p>© 2023 CineBro. Dibuat dengan <i class="fa fa-heart"></i>.</p>
+        <p class="tmdb-logo">Didukung oleh <img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg" alt="TMDB Logo"></p>
+    </footer>
+    
+    <script src="detail.js"></script>
+</body>
+</html>
