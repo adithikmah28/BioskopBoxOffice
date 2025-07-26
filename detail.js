@@ -80,10 +80,15 @@ async function loadDetailPage() {
     if (!contentId) { movieDetailHero.innerHTML = '<h1>Konten tidak ditemukan.</h1>'; return; }
     try {
         const endpoint = `/${contentType}/${contentId}`;
-        const response = await fetch(`${BASE_URL}${endpoint}?api_key=${API_KEY}&language=id-ID&append_to_response=videos,credits`);
-        if (!response.ok) throw new Error('Konten tidak ditemukan.');
-        const data = await response.json();
-        data.overview = data.overview || "Sinopsis belum tersedia.";
+        const [indonesianData, englishData] = await Promise.all([
+            fetch(`${BASE_URL}${endpoint}?api_key=${API_KEY}&language=id-ID&append_to_response=videos,credits`),
+            fetch(`${BASE_URL}${endpoint}?api_key=${API_KEY}&language=en-US&append_to_response=videos`)
+        ]);
+        if (!indonesianData.ok) throw new Error('Konten tidak ditemukan.');
+        let data = await indonesianData.json();
+        const englishDataJson = await englishData.json();
+        data.overview = data.overview || englishDataJson.overview || "Sinopsis belum tersedia.";
+        data.videos = { results: (data.videos && data.videos.results.length > 0) ? data.videos.results : englishDataJson.videos.results };
         const finalContent = { ...data, type: contentType };
         updateMetaTags(finalContent);
         displayHeroDetail(finalContent);
@@ -141,12 +146,18 @@ function handlePlayClick(e) {
     });
 }
 
-function displayTrailer(videos) {
-    if (!videos || videos.results.length === 0) return;
-    const officialTrailer = videos.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
-    const teaser = videos.results.find(v => v.type === 'Teaser' && v.site === 'YouTube');
-    const firstVideo = videos.results.find(v => v.site === 'YouTube');
+// ==========================================================
+// == FUNGSI TRAILER YANG DIPERBAIKI                       ==
+// ==========================================================
+function displayTrailer(videoList) {
+    // 'videoList' sekarang adalah array of video results, bukan objek
+    if (!videoList || videoList.length === 0) return;
+    
+    const officialTrailer = videoList.find(v => v.type === 'Trailer' && v.site === 'YouTube');
+    const teaser = videoList.find(v => v.type === 'Teaser' && v.site === 'YouTube');
+    const firstVideo = videoList.find(v => v.site === 'YouTube');
     const trailer = officialTrailer || teaser || firstVideo;
+
     if (trailer) {
         const trailerSection = document.createElement('section');
         trailerSection.className = 'content-section';
