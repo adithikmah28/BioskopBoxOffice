@@ -136,4 +136,4 @@ closeModalBtn.addEventListener('click', () => {
 });
 
 document.addEventListener('DOMContentLoaded', loadDetailPage);
-requestForm.action = 'https://formspree.io/f/xxxxxxxx';
+requestForm.action = 'https://formspree.io/f/manboaen';
