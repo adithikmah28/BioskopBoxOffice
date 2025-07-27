@@ -5,7 +5,7 @@ const customData = {
     
     // Contoh Movie: Film "Makmum" (ID: 624566)
     '613689': { 
-        videoUrl: 'https://tv5.lk21official.cc/movie/window.php?url=https://playeriframe.lol/iframe.php?url=https%3A%2F%2Fshort.ink%2FB-mT72BFvV',
+        videoUrl: 'https://drive.google.com/file/d/1QTKeem6qlQou4zJDmfxRB0gCMRo9Sn_r/preview',
         synopsis: 'Ini adalah sinopsis manual untuk film Makmum. Rini kembali ke asrama tempat ia dulu tinggal atas permintaan Ibu Kinanti yang kesehatannya terus menurun. Namun, kedatangannya justru mengungkap misteri gaib yang menghantui asrama tersebut.' 
     },
     
