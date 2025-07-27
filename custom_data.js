@@ -4,8 +4,8 @@ const customData = {
     // Format: 'ID_TMDB': { videoUrl: '...', synopsis: '...' }
     
     // Contoh Movie: Film "Makmum" (ID: 624566)
-    '624566': { 
-        videoUrl: 'https://link-video-makmum-kamu.com/stream.mp4',
+    '613689': { 
+        videoUrl: 'https://tv5.lk21official.cc/movie/window.php?url=https://playeriframe.lol/iframe.php?url=https%3A%2F%2Fshort.ink%2FB-mT72BFvV',
         synopsis: 'Ini adalah sinopsis manual untuk film Makmum. Rini kembali ke asrama tempat ia dulu tinggal atas permintaan Ibu Kinanti yang kesehatannya terus menurun. Namun, kedatangannya justru mengungkap misteri gaib yang menghantui asrama tersebut.' 
     },
     
