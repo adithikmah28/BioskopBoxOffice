@@ -10,9 +10,9 @@ const customData = {
     },
     
     // Contoh lain: Film "KKN di Desa Penari" (TMDB ID: 942230)
-    '942230': {
-        videoUrl: 'https://link-kkn-kamu.com/video.html',
-        synopsis: 'Enam mahasiswa yang sedang melakukan KKN di sebuah desa terpencil harus menghadapi teror dari penari misterius yang mengancam keselamatan jiwa mereka.'
+    '1181068': {
+        videoUrl: 'https://short.icu/7to4IeQ4X',
+        synopsis: 'Film "Ipar Adalah Maut" menceritakan tentang kisah rumah tangga Nisa dan Aris yang awalnya harmonis, namun retak akibat perselingkuhan Aris dengan adik kandung Nisa, Rani.'
     },
 
     // Contoh TV Series dengan sinopsis kustom saja
