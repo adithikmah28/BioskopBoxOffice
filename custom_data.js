@@ -4,9 +4,9 @@ const customData = {
     // Format: 'ID_TMDB': { videoUrl: '...', synopsis: '...' }
     
     // Contoh Movie: Film "Makmum" (ID: 624566)
-    '613689': { 
-        videoUrl: 'https://drive.google.com/file/d/1QTKeem6qlQou4zJDmfxRB0gCMRo9Sn_r/preview',
-        synopsis: 'Ini adalah sinopsis manual untuk film Makmum. Rini kembali ke asrama tempat ia dulu tinggal atas permintaan Ibu Kinanti yang kesehatannya terus menurun. Namun, kedatangannya justru mengungkap misteri gaib yang menghantui asrama tersebut.' 
+    '638985': { 
+        videoUrl: 'https://short.icu/ds3-o-8ge',
+        synopsis: 'Enam mahasiswa yang sedang melakukan kuliah kerja nyata di desa terpencil mendapatkan terror dari penaris mistis. Ternyata, salah satu dari mereka melanggar aturan paling fatal di desa tersebut.' 
     },
     
     // Contoh lain: Film "KKN di Desa Penari" (TMDB ID: 942230)
