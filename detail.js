@@ -57,7 +57,7 @@ function getWatchlist() { return JSON.parse(localStorage.getItem('cinebroWatchli
 function saveWatchlist(watchlist) { localStorage.setItem('cinebroWatchlist', JSON.stringify(watchlist)); }
 
 function updateMetaTags(content) {
-    const title = `${content.title || content.name} - Nonton di CineBro`;
+    const title = `${content.title || content.name} - Nonton di BioskopBoxOffice`;
     const description = content.overview ? content.overview.substring(0, 155).trim() + '...' : `Nonton atau download ${title} dengan subtitle Indonesia gratis hanya di CineBro.`;
     const imageUrl = content.backdrop_path ? BACKDROP_URL + content.backdrop_path : IMG_URL + content.poster_path;
     document.title = title;
