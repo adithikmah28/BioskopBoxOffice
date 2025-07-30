@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail - BioskopBoxOffice</title>
+    <title>Detail - bioskopboxoffice.my.id</title>
     <meta name="description" content="Memuat informasi film...">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <meta property="og:type" content="video.movie">
@@ -22,14 +22,12 @@
 </head>
 <body>
     <div class="movie-detail-container">
-        <button class="request-btn-floating" id="request-btn-floating">
-            <i class="fas fa-paper-plane"></i>
-            <span>Request/Report</span>
-        </button>
+        <a href="index.html" class="back-button"><i class="fas fa-arrow-left"></i> Kembali</a>
         <section id="movie-detail-hero"></section>
-        <main class="detail-main-content" id="detail-main-content"></main>
+        <main class="detail-main-content" id="detail-main-content">
+            <!-- Konten (Trailer, Aktor, Rekomendasi) akan disisipkan di sini oleh JavaScript -->
+        </main>
     </div>
-
     <div class="modal-container" id="video-modal">
         <div class="player-wrapper">
             <div class="subtitle-notice">
@@ -43,7 +41,6 @@
             </div>
         </div>
     </div>
-    
     <div class="modal-container" id="ad-timer-modal">
         <div class="ad-timer-content">
             <div class="ad-timer-icon"><i class="fas fa-shield-alt"></i></div>
@@ -53,27 +50,10 @@
             <button class="ad-timer-button" id="ad-timer-continue-btn" style="display: none;">Lanjutkan</button>
         </div>
     </div>
-    
-    <div class="modal-container" id="request-modal">
-        <div class="form-modal-content">
-            <span class="close-modal" id="close-request-modal">×</span>
-            <h3>Request Film atau Report Masalah</h3>
-            <p>Beritahu kami film apa yang kamu inginkan atau jika ada video yang rusak/hilang.</p>
-            <form id="request-form" action="https://formspree.io/f/manboaen" method="POST">
-                <input type="text" name="Judul Film" placeholder="Judul Film/Serial TV" required>
-                <input type="email" name="Email" placeholder="Email Anda (opsional, untuk notifikasi)" >
-                <textarea name="Pesan" placeholder="Deskripsi, Subtitle Masalah atau Video Error" rows="4"></textarea>
-                <div id="form-status"></div>
-                <button type="submit">Kirim Request</button>
-            </form>
-        </div>
-    </div>
-
     <footer>
-        <p>© 2023 BioskopBoxOffice Dibuat dengan <i class="fa fa-heart"></i>.</p>
+        <p>© 2023 CineBro. Dibuat dengan <i class="fa fa-heart"></i>.</p>
         <p class="tmdb-logo">Didukung oleh <img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg" alt="TMDB Logo"></p>
     </footer>
-    
     <script src="custom_data.js"></script>
     <script src="detail.js"></script>
 </body>
