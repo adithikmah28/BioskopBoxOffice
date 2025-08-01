@@ -39,7 +39,6 @@ a.movie-card:hover .movie-info { opacity: 1; }
 .swiper-button-next::after, .swiper-button-prev::after { font-size: 20px; font-weight: bold; }
 /* Style untuk hasil pencarian (grid biasa) */
 .movie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
-.movie-grid a.movie-card { height: auto; }
 
 /* Halaman Detail */
 .movie-detail-container { width: 100%; }
@@ -71,6 +70,8 @@ a.movie-card:hover .movie-info { opacity: 1; }
 .actor-card img { width: 130px; height: 130px; object-fit: cover; object-position: center top; border-radius: 50%; margin-bottom: 10px; border: 2px solid var(--grey-color); }
 .actor-card h3 { font-size: 1rem; font-weight: 500; }
 .actor-card p { font-size: 0.8rem; color: #aaa; }
+
+/* Modal & Formulir */
 .modal-container { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
 .player-wrapper { display: flex; flex-direction: column; width: 100%; height: 100%; max-width: 1400px; max-height: 90vh; }
 .modal-content { position: relative; width: 100%; height: 100%; background: #000; }
@@ -97,6 +98,8 @@ a.movie-card:hover .movie-info { opacity: 1; }
 .ad-timer-countdown { font-size: 1.1rem; font-weight: 500; margin-top: 20px; }
 .ad-timer-countdown span { font-size: 1.5rem; font-weight: 700; color: var(--primary-color); }
 .ad-timer-button { display: inline-block; background-color: var(--primary-color); color: white; border: none; padding: 12px 40px; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; margin-top: 20px; }
+
+/* Halaman Download */
 .download-page-body { display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
 .download-container { width: 100%; max-width: 700px; margin: auto; }
 .download-card { background-color: var(--grey-color); border-radius: 12px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); text-align: center; }
@@ -107,10 +110,14 @@ a.movie-card:hover .movie-info { opacity: 1; }
 .download-buttons a { display: block; background-color: var(--primary-color); color: white; padding: 15px 20px; border-radius: 8px; font-size: 1.1rem; font-weight: 600; text-decoration: none; }
 .download-buttons a i { margin-right: 10px; }
 .download-page-body footer { border-top: none; margin-top: 20px; }
+
+/* Footer */
 footer { text-align: center; padding: 30px 50px; margin-top: 50px; border-top: 1px solid var(--grey-color); }
 footer p { margin-bottom: 10px; }
 .tmdb-logo { display: flex; justify-content: center; align-items: center; gap: 10px; color: #888; }
 .tmdb-logo img { height: 20px; }
+
+/* Responsive */
 @media (max-width: 768px) {
     header { padding: 15px 20px; }
     .hamburger-menu { display: block; }
@@ -120,6 +127,7 @@ footer p { margin-bottom: 10px; }
     .nav-btn { justify-content: center; }
     #main-content { padding: 100px 20px 0 20px; }
     .swiper-slide { width: 130px !important; }
+    .movie-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
     #movie-detail-hero { flex-direction: column; padding: 80px 20px 30px; text-align: center; min-height: auto; }
     .detail-box { max-width: 100%; }
     .detail-box h1 { font-size: 2.2rem; }
