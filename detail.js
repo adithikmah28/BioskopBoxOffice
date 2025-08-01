@@ -83,38 +83,22 @@ async function loadDetailPage() {
     if (!contentId) { movieDetailHero.innerHTML = '<h1>Konten tidak ditemukan.</h1>'; return; }
     try {
         const endpoint = `/${contentType}/${contentId}`;
-        const response = await fetch(`${BASE_URL}${endpoint}?api_key=${API_KEY}&language=id-ID&append_to_response=videos,credits,recommendations`);
+        const response = await fetch(`${BASE_URL}${endpoint}?api_key=${API_KEY}&language=id-ID&append_to_response=videos,credits,recommendations,images&include_image_language=en,null`);
         if (!response.ok) throw new Error('Konten tidak ditemukan.');
         let data = await response.json();
-
-        // Ambil data gambar/logo secara terpisah dengan pengecekan
-        try {
-            const imageResponse = await fetch(`${BASE_URL}${endpoint}/images?api_key=${API_KEY}&include_image_language=en,null`);
-            if(imageResponse.ok) {
-                data.images = await imageResponse.json();
-            } else {
-                data.images = { logos: [] };
-            }
-        } catch (imgError) {
-            console.warn("Gagal memuat data logo:", imgError);
-            data.images = { logos: [] };
-        }
-
         if (!data.overview) {
             const englishResponse = await fetch(`${BASE_URL}${endpoint}?api_key=${API_KEY}&language=en-US`);
             const englishData = await englishResponse.json();
             data.overview = englishData.overview || "Sinopsis untuk film ini belum tersedia.";
         }
-        
         data.videos = data.videos || { results: [] };
         data.credits = data.credits || { cast: [] };
         data.recommendations = data.recommendations || { results: [] };
-
         const finalContent = { ...data, type: contentType };
         updateMetaTags(finalContent);
         displayHeroDetail(finalContent);
         detailMainContent.innerHTML = '';
-        displayTrailer(finalContent.videos.results);
+        displayTrailer(finalContent); // Mengirim seluruh objek konten
         displayActors(finalContent.credits.cast);
         displayRecommendations(finalContent.recommendations.results, contentType);
     } catch (error) {
@@ -190,44 +174,68 @@ function handleWatchlistClick(e) {
     saveWatchlist(watchlist);
 }
 
-function displayTrailer(videos) {
+function displayTrailer(content) {
+    const videos = content.videos.results;
     if (!videos || videos.length === 0) return;
-    const trailerSection = document.createElement('section');
-    trailerSection.className = 'content-section';
+
     const officialTrailer = videos.find(v => v.type === 'Trailer' && v.site === 'YouTube');
     const teaser = videos.find(v => v.type === 'Teaser' && v.site === 'YouTube');
     const firstVideo = videos.find(v => v.site === 'YouTube');
     const trailer = officialTrailer || teaser || firstVideo;
+
+    const trailerSection = document.getElementById('trailer-section');
+    if (!trailerSection) return;
+
     if (trailer) {
-        trailerSection.innerHTML = `<h2>Trailer</h2><div id="trailer-container"><iframe src="https://www.youtube.com/embed/${trailer.key}" title="YouTube video player" allowfullscreen></iframe></div>`;
-        detailMainContent.appendChild(trailerSection);
+        trailerSection.style.display = 'block';
+        const trailerContainer = trailerSection.querySelector('#trailer-container');
+        const thumbnailUrl = content.backdrop_path ? `${BACKDROP_URL}${content.backdrop_path}` : `${IMG_URL}${content.poster_path}`;
+        
+        trailerContainer.innerHTML = `
+            <img src="${thumbnailUrl}" class="trailer-thumbnail" alt="Trailer thumbnail">
+            <div class="play-icon-overlay"><i class="fas fa-play"></i></div>
+        `;
+
+        trailerContainer.addEventListener('click', () => {
+            trailerContainer.innerHTML = `<iframe src="https://www.youtube.com/embed/${trailer.key}?autoplay=1" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+        }, { once: true });
+    } else {
+        trailerSection.style.display = 'none';
     }
 }
 
 function displayActors(cast) {
-    if (!cast || cast.filter(actor => actor.profile_path).length === 0) return;
-    const actorsSection = document.createElement('section');
-    actorsSection.className = 'content-section';
-    let actorsHTML = '';
+    const actorsSection = document.getElementById('actors-section');
+    if (!actorsSection || !cast || cast.filter(actor => actor.profile_path).length === 0) {
+        if(actorsSection) actorsSection.style.display = 'none';
+        return;
+    }
+    actorsSection.style.display = 'block';
+    const actorsGrid = actorsSection.querySelector('.actors-grid');
+    actorsGrid.innerHTML = '';
     cast.filter(actor => actor.profile_path).slice(0, 12).forEach(actor => {
-        actorsHTML += `<div class="actor-card"><img src="${IMG_URL + actor.profile_path}" alt="${actor.name}"><h3>${actor.name}</h3><p>${actor.character}</p></div>`;
+        const actorCard = document.createElement('div');
+        actorCard.classList.add('actor-card');
+        actorCard.innerHTML = `<img src="${IMG_URL + actor.profile_path}" alt="${actor.name}"><h3>${actor.name}</h3><p>${actor.character}</p>`;
+        actorsGrid.appendChild(actorCard);
     });
-    actorsSection.innerHTML = `<h2>Pemeran Utama</h2><div class="actors-grid">${actorsHTML}</div>`;
-    detailMainContent.appendChild(actorsSection);
 }
 
 function displayRecommendations(recommendations, type) {
-    if (!recommendations || recommendations.length === 0) return;
-    const recommendationsSection = document.createElement('section');
-    recommendationsSection.className = 'content-section';
-    let recHTML = '';
+    const recommendationsSection = document.getElementById('recommendations-section');
+    if (!recommendationsSection || !recommendations || recommendations.length === 0) {
+        if(recommendationsSection) recommendationsSection.style.display = 'none';
+        return;
+    }
+    recommendationsSection.style.display = 'block';
+    const recGrid = recommendationsSection.querySelector('.movie-grid');
+    recGrid.innerHTML = '';
     recommendations.slice(0, 10).forEach(item => {
         if (item.poster_path) {
-            recHTML += `<a href="detail.html?id=${item.id}&type=${type}" class="movie-card"><img src="${IMG_URL + item.poster_path}" alt="${item.title || item.name}"><div class="movie-info"><h3>${item.title || item.name}</h3></div></a>`;
+            recHTML = `<a href="detail.html?id=${item.id}&type=${type}" class="movie-card"><img src="${IMG_URL + item.poster_path}" alt="${item.title || item.name}"><div class="movie-info"><h3>${item.title || item.name}</h3></div></a>`;
+            recGrid.innerHTML += recHTML;
         }
     });
-    recommendationsSection.innerHTML = `<h2>Rekomendasi Serupa</h2><div class="movie-grid">${recHTML}</div>`;
-    detailMainContent.appendChild(recommendationsSection);
 }
 
 closeModalBtn.addEventListener('click', () => {
