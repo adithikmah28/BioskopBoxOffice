@@ -14,8 +14,11 @@ const ADSTERRA_DIRECT_LINKS = [
 ];
 const COUNTDOWN_SECONDS = 3;
 
+// ==========================================================
+// == DATABASE KUSTOM DIKEMBALIKAN KE SINI UNTUK STABILITAS ==
+// ==========================================================
 const customData = {
-    '624566': { videoUrl: '...' } // Contoh data kustom
+    '624566': { videoUrl: '...' }
 };
 
 const movieDetailHero = document.getElementById('movie-detail-hero');
@@ -91,14 +94,11 @@ async function loadDetailPage() {
             const englishData = await englishResponse.json();
             data.overview = englishData.overview || "Sinopsis untuk film ini belum tersedia.";
         }
-        data.videos = data.videos || { results: [] };
-        data.credits = data.credits || { cast: [] };
-        data.recommendations = data.recommendations || { results: [] };
         const finalContent = { ...data, type: contentType };
         updateMetaTags(finalContent);
         displayHeroDetail(finalContent);
         detailMainContent.innerHTML = '';
-        displayTrailer(finalContent); // Mengirim seluruh objek konten
+        displayTrailer(finalContent.videos.results);
         displayActors(finalContent.credits.cast);
         displayRecommendations(finalContent.recommendations.results, contentType);
     } catch (error) {
@@ -118,7 +118,7 @@ function displayHeroDetail(content) {
     const runtimeInfo = content.type === 'tv' ? (content.number_of_seasons ? `${content.number_of_seasons} Seasons` : 'Info N/A') : (content.runtime ? `${Math.floor(content.runtime / 60)}h ${content.runtime % 60}m` : 'Info N/A');
     const isInWatchlist = getWatchlist().includes(content.id.toString());
     let titleHTML;
-    const englishLogo = content.images?.logos?.find(logo => logo.iso_639_1 === 'en');
+    const englishLogo = content.images && content.images.logos ? content.images.logos.find(logo => logo.iso_639_1 === 'en') : undefined;
     if (englishLogo) {
         titleHTML = `<div class="title-logo"><img src="${LOGO_URL + englishLogo.file_path}" alt="${title} Logo"></div>`;
     } else {
@@ -174,68 +174,44 @@ function handleWatchlistClick(e) {
     saveWatchlist(watchlist);
 }
 
-function displayTrailer(content) {
-    const videos = content.videos.results;
+function displayTrailer(videos) {
     if (!videos || videos.length === 0) return;
-
+    const trailerSection = document.createElement('section');
+    trailerSection.className = 'content-section';
     const officialTrailer = videos.find(v => v.type === 'Trailer' && v.site === 'YouTube');
     const teaser = videos.find(v => v.type === 'Teaser' && v.site === 'YouTube');
     const firstVideo = videos.find(v => v.site === 'YouTube');
     const trailer = officialTrailer || teaser || firstVideo;
-
-    const trailerSection = document.getElementById('trailer-section');
-    if (!trailerSection) return;
-
     if (trailer) {
-        trailerSection.style.display = 'block';
-        const trailerContainer = trailerSection.querySelector('#trailer-container');
-        const thumbnailUrl = content.backdrop_path ? `${BACKDROP_URL}${content.backdrop_path}` : `${IMG_URL}${content.poster_path}`;
-        
-        trailerContainer.innerHTML = `
-            <img src="${thumbnailUrl}" class="trailer-thumbnail" alt="Trailer thumbnail">
-            <div class="play-icon-overlay"><i class="fas fa-play"></i></div>
-        `;
-
-        trailerContainer.addEventListener('click', () => {
-            trailerContainer.innerHTML = `<iframe src="https://www.youtube.com/embed/${trailer.key}?autoplay=1" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-        }, { once: true });
-    } else {
-        trailerSection.style.display = 'none';
+        trailerSection.innerHTML = `<h2>Trailer</h2><div id="trailer-container"><iframe src="https://www.youtube.com/embed/${trailer.key}" title="YouTube video player" allowfullscreen></iframe></div>`;
+        detailMainContent.appendChild(trailerSection);
     }
 }
 
 function displayActors(cast) {
-    const actorsSection = document.getElementById('actors-section');
-    if (!actorsSection || !cast || cast.filter(actor => actor.profile_path).length === 0) {
-        if(actorsSection) actorsSection.style.display = 'none';
-        return;
-    }
-    actorsSection.style.display = 'block';
-    const actorsGrid = actorsSection.querySelector('.actors-grid');
-    actorsGrid.innerHTML = '';
+    if (!cast || cast.filter(actor => actor.profile_path).length === 0) return;
+    const actorsSection = document.createElement('section');
+    actorsSection.className = 'content-section';
+    let actorsHTML = '';
     cast.filter(actor => actor.profile_path).slice(0, 12).forEach(actor => {
-        const actorCard = document.createElement('div');
-        actorCard.classList.add('actor-card');
-        actorCard.innerHTML = `<img src="${IMG_URL + actor.profile_path}" alt="${actor.name}"><h3>${actor.name}</h3><p>${actor.character}</p>`;
-        actorsGrid.appendChild(actorCard);
+        actorsHTML += `<div class="actor-card"><img src="${IMG_URL + actor.profile_path}" alt="${actor.name}"><h3>${actor.name}</h3><p>${actor.character}</p></div>`;
     });
+    actorsSection.innerHTML = `<h2>Pemeran Utama</h2><div class="actors-grid">${actorsHTML}</div>`;
+    detailMainContent.appendChild(actorsSection);
 }
 
 function displayRecommendations(recommendations, type) {
-    const recommendationsSection = document.getElementById('recommendations-section');
-    if (!recommendationsSection || !recommendations || recommendations.length === 0) {
-        if(recommendationsSection) recommendationsSection.style.display = 'none';
-        return;
-    }
-    recommendationsSection.style.display = 'block';
-    const recGrid = recommendationsSection.querySelector('.movie-grid');
-    recGrid.innerHTML = '';
+    if (!recommendations || recommendations.length === 0) return;
+    const recommendationsSection = document.createElement('section');
+    recommendationsSection.className = 'content-section';
+    let recHTML = '';
     recommendations.slice(0, 10).forEach(item => {
         if (item.poster_path) {
-            recHTML = `<a href="detail.html?id=${item.id}&type=${type}" class="movie-card"><img src="${IMG_URL + item.poster_path}" alt="${item.title || item.name}"><div class="movie-info"><h3>${item.title || item.name}</h3></div></a>`;
-            recGrid.innerHTML += recHTML;
+            recHTML += `<a href="detail.html?id=${item.id}&type=${type}" class="movie-card"><img src="${IMG_URL + item.poster_path}" alt="${item.title || item.name}"><div class="movie-info"><h3>${item.title || item.name}</h3></div></a>`;
         }
     });
+    recommendationsSection.innerHTML = `<h2>Rekomendasi Serupa</h2><div class="movie-grid">${recHTML}</div>`;
+    detailMainContent.appendChild(recommendationsSection);
 }
 
 closeModalBtn.addEventListener('click', () => {
