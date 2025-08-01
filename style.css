@@ -66,43 +66,91 @@ a.movie-card:hover .movie-info { opacity: 1; }
 .detail-main-content { padding: 0 50px; }
 .content-section { margin-bottom: 50px; }
 .content-section h2 { font-size: 1.8rem; margin-bottom: 20px; padding-left: 15px; border-left: 4px solid var(--primary-color); }
-/* ... (Sisa style lain tidak berubah) ... */
+#trailer-container { position: relative; overflow: hidden; width: 100%; padding-top: 56.25%; border-radius: 12px; background-color: #000; }
+#trailer-container iframe, #trailer-container .trailer-placeholder { position: absolute; top: 0; left: 0; bottom: 0; right: 0; width: 100%; height: 100%; border: none; }
+#trailer-container .trailer-placeholder { display: flex; align-items: center; justify-content: center; color: #aaa; font-size: 1.2rem; }
+.actors-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 25px; }
+.actor-card { text-align: center; }
+.actor-card img { width: 130px; height: 130px; object-fit: cover; object-position: center top; border-radius: 50%; margin-bottom: 10px; border: 2px solid var(--grey-color); }
+.actor-card h3 { font-size: 1rem; font-weight: 500; }
+.actor-card p { font-size: 0.8rem; color: #aaa; }
+
+/* Modal & Formulir */
+.modal-container { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
+.player-wrapper { display: flex; flex-direction: column; width: 100%; height: 100%; max-width: 1400px; max-height: 90vh; }
+.modal-content { position: relative; width: 100%; height: 100%; background: #000; }
+.close-modal { position: absolute; top: -15px; right: -15px; font-size: 3rem; font-weight: bold; color: white; background: #141414; border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; line-height: 1; cursor: pointer; transition: transform 0.2s; z-index: 2010; }
+.iframe-wrapper { position: relative; width: 100%; height: 100%; }
+.iframe-wrapper iframe { width: 100%; height: 100%; border: none; }
+#custom-player-wrapper { width: 100%; height: 100%; }
+.subtitle-notice { width: 100%; padding: 10px 20px; background-color: rgba(34, 34, 34, 0.9); border-bottom: 1px solid var(--grey-color); text-align: center; }
+.subtitle-notice p { font-size: 0.9rem; color: #ccc; }
+.subtitle-notice i { color: var(--primary-color); margin: 0 5px; }
+.form-modal-content { background-color: var(--grey-color); padding: 25px; border-radius: 12px; max-width: 500px; width: 100%; box-shadow: 0 10px 40px rgba(0,0,0,0.5); position: relative; }
+.form-modal-content h3 { font-size: 1.8rem; margin-bottom: 10px; }
+.form-modal-content p { color: #ccc; margin-bottom: 20px; }
+#request-form { display: flex; flex-direction: column; gap: 15px; }
+#request-form input, #request-form textarea { background-color: #222; border: 1px solid #555; border-radius: 5px; padding: 12px; font-size: 1rem; color: white; font-family: 'Poppins', sans-serif; }
+#request-form button { background-color: var(--primary-color); color: white; border: none; padding: 12px; border-radius: 5px; font-size: 1.1rem; font-weight: 600; cursor: pointer; }
+#form-status { margin-top: 10px; font-weight: 500; min-height: 1.2em; }
+#form-status.success { color: #4CAF50; }
+#form-status.error { color: #f44336; }
+.ad-timer-content { background-color: var(--grey-color); padding: 40px; border-radius: 12px; text-align: center; max-width: 400px; width: 100%; box-shadow: 0 10px 40px rgba(0,0,0,0.5); border: 1px solid #444; }
+.ad-timer-icon { font-size: 3rem; color: var(--primary-color); margin-bottom: 20px; }
+.ad-timer-content h3 { font-size: 1.8rem; margin-bottom: 10px; }
+.ad-timer-content p { color: #ccc; margin-bottom: 25px; }
+.ad-timer-countdown { font-size: 1.1rem; font-weight: 500; margin-top: 20px; }
+.ad-timer-countdown span { font-size: 1.5rem; font-weight: 700; color: var(--primary-color); }
+.ad-timer-button { display: inline-block; background-color: var(--primary-color); color: white; border: none; padding: 12px 40px; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; margin-top: 20px; }
+
+/* Halaman Download */
+.download-page-body { display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+.download-container { width: 100%; max-width: 700px; margin: auto; }
+.download-card { background-color: var(--grey-color); border-radius: 12px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); text-align: center; }
+.download-header { display: flex; gap: 30px; text-align: left; margin-bottom: 30px; }
+.download-poster img { width: 150px; border-radius: 8px; }
+.download-info h1 { font-size: 2rem; margin-bottom: 10px; }
+.download-info p { font-size: 0.9rem; color: #ccc; line-height: 1.6; }
+.download-buttons a { display: block; background-color: var(--primary-color); color: white; padding: 15px 20px; border-radius: 8px; font-size: 1.1rem; font-weight: 600; text-decoration: none; }
+.download-buttons a i { margin-right: 10px; }
+.download-page-body footer { border-top: none; margin-top: 20px; }
+
+/* Footer */
+footer { text-align: center; padding: 30px 50px; margin-top: 50px; border-top: 1px solid var(--grey-color); }
+footer p { margin-bottom: 10px; }
+.tmdb-logo { display: flex; justify-content: center; align-items: center; gap: 10px; color: #888; }
+.tmdb-logo img { height: 20px; }
 
 /* Responsive */
 @media (max-width: 768px) {
-    /* ... (Style header mobile sama) ... */
-    
-    /* ================================== */
-    /* == PERBAIKAN HERO DETAIL MOBILE == */
-    /* ================================== */
-    .back-button { top: 20px; left: 20px; }
-    #movie-detail-hero {
-        flex-direction: column;
-        padding: 0; /* Hapus padding */
-        min-height: 70vh; /* Sesuaikan tinggi */
-        justify-content: flex-end; /* Dorong konten ke bawah */
-        text-align: center;
-    }
-    #movie-detail-hero::before {
-        /* Gradasi lebih kuat agar teks terbaca di atas backdrop */
-        background: linear-gradient(to top, var(--dark-color) 20%, transparent 80%);
-    }
-    .poster-box {
-        display: none; /* Sembunyikan poster kecil */
-    }
-    .detail-box {
-        max-width: 100%;
-        padding: 0 20px 30px 20px; /* Padding untuk konten */
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
+    header { padding: 15px 20px; }
+    .hamburger-menu { display: block; }
+    .nav-wrapper { display: none; position: absolute; top: 68px; right: 20px; background-color: var(--grey-color); flex-direction: column; padding: 20px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); gap: 15px; align-items: stretch; }
+    .nav-wrapper.active { display: flex; }
+    #search-form { width: 100%; }
+    .nav-btn { justify-content: center; }
+    #main-content { padding: 100px 20px 0 20px; }
+    .swiper-slide { width: 130px !important; }
+    .movie-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+    .back-button { top: 20px; left: 20px; padding: 8px 12px; font-size: 0.9rem; }
+    #movie-detail-hero { flex-direction: column; padding: 0; min-height: 70vh; justify-content: flex-end; text-align: center; }
+    #movie-detail-hero::before { background: linear-gradient(to top, var(--dark-color) 20%, transparent 80%); }
+    .poster-box { display: none; }
+    .detail-box { max-width: 100%; padding: 0 20px 30px 20px; display: flex; flex-direction: column; align-items: center; }
     .detail-box h1.fallback-title { font-size: 2.5rem; }
     .title-logo img { max-height: 80px; }
     .meta-info { justify-content: center; }
     .genres { justify-content: center; }
     .overview { max-width: 100%; font-size: 0.9rem; }
     .action-buttons { justify-content: center; }
-    
-    /* ... (Sisa style mobile lain tidak berubah) ... */
+    .detail-main-content { padding: 0 20px; }
+    .content-section h2 { font-size: 1.5rem; }
+    .actors-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
+    .actor-card img { width: 100px; height: 100px; }
+    .player-wrapper { width: 100%; height: auto; max-height: none; }
+    .modal-content { height: auto; }
+    .iframe-wrapper { padding-bottom: 56.25%; height: 0; }
+    .iframe-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+    .subtitle-notice p { font-size: 0.7rem; }
+    .download-header { flex-direction: column; align-items: center; text-align: center; }
 }
