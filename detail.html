@@ -24,8 +24,19 @@
     <div class="movie-detail-container">
         <a href="index.html" class="back-button"><i class="fas fa-arrow-left"></i> Kembali</a>
         <section id="movie-detail-hero"></section>
-        <main class="detail-main-content" id="detail-main-content">
-            <!-- Konten (Trailer, Aktor, Rekomendasi) akan disisipkan di sini oleh JavaScript -->
+        <main class="detail-main-content">
+            <section id="trailer-section" class="content-section">
+                <h2>Trailer</h2>
+                <div id="trailer-container"></div>
+            </section>
+            <section id="actors-section" class="content-section">
+                <h2>Pemeran Utama</h2>
+                <div class="actors-grid"></div>
+            </section>
+            <section id="recommendations-section" class="content-section">
+                <h2>Rekomendasi Serupa</h2>
+                <div class="movie-grid"></div>
+            </section>
         </main>
     </div>
     <div class="modal-container" id="video-modal">
@@ -54,8 +65,7 @@
         <p>© 2023 CineBro. Dibuat dengan <i class="fa fa-heart"></i>.</p>
         <p class="tmdb-logo">Didukung oleh <img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg" alt="TMDB Logo"></p>
     </footer>
-    
-    <!-- HANYA PANGGIL SATU FILE JAVASCRIPT -->
+    <script src="custom_data.js"></script>
     <script src="detail.js"></script>
 </body>
 </html>
