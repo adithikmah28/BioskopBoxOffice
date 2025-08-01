@@ -40,7 +40,7 @@ a.movie-card:hover .movie-info { opacity: 1; }
 /* Halaman Detail */
 .movie-detail-container { width: 100%; }
 .back-button { position: absolute; top: 30px; left: 50px; z-index: 110; background: rgba(0,0,0,0.5); color: white; padding: 10px 15px; border-radius: 50px; font-weight: 500; transition: background 0.3s; }
-#movie-detail-hero { min-height: 90vh; padding: 100px 50px 50px; display: flex; align-items: center; gap: 40px; position: relative; background-size: cover; background-position: center; }
+#movie-detail-hero { height: 100vh; padding: 0 50px; display: flex; align-items: center; gap: 40px; position: relative; background-size: cover; background-position: center; }
 #movie-detail-hero::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, rgba(20,20,20,0.3) 0%, rgba(20,20,20,0.9) 100%), linear-gradient(to top, var(--dark-color) 10%, transparent 50%); z-index: 1; }
 .poster-box { width: 280px; flex-shrink: 0; z-index: 2; }
 .poster-box img { width: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
@@ -63,7 +63,7 @@ a.movie-card:hover .movie-info { opacity: 1; }
 .watchlist-btn.active { background-color: var(--primary-color); border-color: var(--primary-color); }
 .download-btn { background-color: white; color: black; width: 50px; height: 50px; border-radius: 50%; font-size: 1.5rem; border: none; padding: 0; }
 .download-btn:hover { transform: scale(1.1); }
-.detail-main-content { padding: 0 50px; }
+.detail-main-content { padding: 50px; background-color: var(--dark-color); }
 .content-section { margin-bottom: 50px; }
 .content-section h2 { font-size: 1.8rem; margin-bottom: 20px; padding-left: 15px; border-left: 4px solid var(--primary-color); }
 #trailer-container { position: relative; overflow: hidden; width: 100%; padding-top: 56.25%; border-radius: 12px; background-color: #000; }
@@ -133,7 +133,7 @@ footer p { margin-bottom: 10px; }
     .swiper-slide { width: 130px !important; }
     .movie-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
     .back-button { top: 20px; left: 20px; }
-    #movie-detail-hero { flex-direction: column; padding: 0; min-height: 70vh; justify-content: flex-end; text-align: center; }
+    #movie-detail-hero { height: 80vh; flex-direction: column; padding: 0; justify-content: flex-end; text-align: center; }
     #movie-detail-hero::before { background: linear-gradient(to top, var(--dark-color) 20%, transparent 80%); }
     .poster-box { display: none; }
     .detail-box { max-width: 100%; padding: 0 20px 30px 20px; display: flex; flex-direction: column; align-items: center; }
@@ -143,7 +143,7 @@ footer p { margin-bottom: 10px; }
     .genres { justify-content: center; }
     .overview { max-width: 100%; font-size: 0.9rem; }
     .action-buttons { justify-content: center; }
-    .detail-main-content { padding: 0 20px; }
+    .detail-main-content { padding: 40px 20px; }
     .content-section h2 { font-size: 1.5rem; }
     .actors-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
     .actor-card img { width: 100px; height: 100px; }
