@@ -14,6 +14,9 @@ const ADSTERRA_DIRECT_LINKS = [
 ];
 const COUNTDOWN_SECONDS = 3;
 
+// ==========================================================
+// == DATABASE KUSTOM DIKEMBALIKAN KE SINI UNTUK STABILITAS ==
+// ==========================================================
 const customData = {
     '624566': { videoUrl: '...' }
 };
@@ -86,18 +89,11 @@ async function loadDetailPage() {
         const response = await fetch(`${BASE_URL}${endpoint}?api_key=${API_KEY}&language=id-ID&append_to_response=videos,credits,recommendations,images&include_image_language=en,null`);
         if (!response.ok) throw new Error('Konten tidak ditemukan.');
         let data = await response.json();
-        
         if (!data.overview) {
             const englishResponse = await fetch(`${BASE_URL}${endpoint}?api_key=${API_KEY}&language=en-US`);
             const englishData = await englishResponse.json();
             data.overview = englishData.overview || "Sinopsis untuk film ini belum tersedia.";
         }
-        
-        // Pengecekan keamanan untuk videos, credits, dan recommendations
-        data.videos = data.videos || { results: [] };
-        data.credits = data.credits || { cast: [] };
-        data.recommendations = data.recommendations || { results: [] };
-
         const finalContent = { ...data, type: contentType };
         updateMetaTags(finalContent);
         displayHeroDetail(finalContent);
@@ -121,19 +117,13 @@ function displayHeroDetail(content) {
     const formattedDate = releaseDate ? new Date(releaseDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'numeric', year: 'numeric' }) : 'N/A';
     const runtimeInfo = content.type === 'tv' ? (content.number_of_seasons ? `${content.number_of_seasons} Seasons` : 'Info N/A') : (content.runtime ? `${Math.floor(content.runtime / 60)}h ${content.runtime % 60}m` : 'Info N/A');
     const isInWatchlist = getWatchlist().includes(content.id.toString());
-    
     let titleHTML;
-    // ==========================================================
-    // == PERBAIKAN UTAMA: PENGECEKAN KEAMANAN UNTUK LOGO      ==
-    // ==========================================================
     const englishLogo = content.images && content.images.logos ? content.images.logos.find(logo => logo.iso_639_1 === 'en') : undefined;
-    
     if (englishLogo) {
         titleHTML = `<div class="title-logo"><img src="${LOGO_URL + englishLogo.file_path}" alt="${title} Logo"></div>`;
     } else {
         titleHTML = `<h1 class="fallback-title">${title}</h1>`;
     }
-
     movieDetailHero.innerHTML = `
         <div class="poster-box"><img src="${IMG_URL + content.poster_path}" alt="${title}"></div>
         <div class="detail-box">
