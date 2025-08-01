@@ -2,16 +2,21 @@ const API_KEY = '8c79e8986ea53efac75026e541207aa3';
 const BASE_URL = 'https://api.themoviedb.org/3';
 const IMG_URL = 'https://image.tmdb.org/t/p/w500';
 const BACKDROP_URL = 'https://image.tmdb.org/t/p/original';
+const LOGO_URL = 'https://image.tmdb.org/t/p/w500';
 const STREAMING_URL_MOVIE = 'https://vidfast.pro/movie/';
 const STREAMING_URL_TV = 'https://vidfast.pro/tv/';
 const ADSTERRA_DIRECT_LINKS = [
-    'https://www.profitableratecpm.com/d1e5phefj?key=c3b3e824ff1d208c1679071aba6d0127',
-    'https://www.profitableratecpm.com/u5xypz2u8j?key=d8afdfb1e3bdf2fb24c83cbd4739b52d',
-    'https://www.profitableratecpm.com/fiwxe3xm?key=04b7f4be0a02a383fc172e4d231e5df2',
-    'https://www.profitableratecpm.com/m9jcb8hgd5?key=8c28bc177e0b7d8b78e18ee16c0ba2dc',
-    'https://www.profitableratecpm.com/xdz7cfckrz?key=4da66776844b84dbeb38d4fbfc6fadb9'
+    'GANTI_DENGAN_DIRECT_LINK_1',
+    'GANTI_DENGAN_DIRECT_LINK_2',
+    'GANTI_DENGAN_DIRECT_LINK_3',
+    'GANTI_DENGAN_DIRECT_LINK_4',
+    'GANTI_DENGAN_DIRECT_LINK_5'
 ];
 const COUNTDOWN_SECONDS = 3;
+
+const customData = {
+    '624566': { videoUrl: '...' }
+};
 
 const movieDetailHero = document.getElementById('movie-detail-hero');
 const detailMainContent = document.getElementById('detail-main-content');
@@ -57,7 +62,7 @@ function getWatchlist() { return JSON.parse(localStorage.getItem('cinebroWatchli
 function saveWatchlist(watchlist) { localStorage.setItem('cinebroWatchlist', JSON.stringify(watchlist)); }
 
 function updateMetaTags(content) {
-    const title = `${content.title || content.name} - Nonton di BioskopBoxOffice`;
+    const title = `${content.title || content.name} - Nonton di CineBro`;
     const description = content.overview ? content.overview.substring(0, 155).trim() + '...' : `Nonton atau download ${title} dengan subtitle Indonesia gratis hanya di CineBro.`;
     const imageUrl = content.backdrop_path ? BACKDROP_URL + content.backdrop_path : IMG_URL + content.poster_path;
     document.title = title;
@@ -78,15 +83,14 @@ async function loadDetailPage() {
     if (!contentId) { movieDetailHero.innerHTML = '<h1>Konten tidak ditemukan.</h1>'; return; }
     try {
         const endpoint = `/${contentType}/${contentId}`;
-        const [indonesianData, englishData] = await Promise.all([
-            fetch(`${BASE_URL}${endpoint}?api_key=${API_KEY}&language=id-ID&append_to_response=videos,credits,recommendations`),
-            fetch(`${BASE_URL}${endpoint}?api_key=${API_KEY}&language=en-US&append_to_response=videos`)
-        ]);
-        if (!indonesianData.ok) throw new Error('Konten tidak ditemukan.');
-        let data = await indonesianData.json();
-        const englishDataJson = await englishData.json();
-        data.overview = data.overview || englishDataJson.overview || "Sinopsis belum tersedia.";
-        data.videos = { results: (data.videos && data.videos.results.length > 0) ? data.videos.results : englishDataJson.videos.results };
+        const response = await fetch(`${BASE_URL}${endpoint}?api_key=${API_KEY}&language=id-ID&append_to_response=videos,credits,recommendations,images&include_image_language=en,null`);
+        if (!response.ok) throw new Error('Konten tidak ditemukan.');
+        let data = await response.json();
+        if (!data.overview) {
+            const englishResponse = await fetch(`${BASE_URL}${endpoint}?api_key=${API_KEY}&language=en-US`);
+            const englishData = await englishResponse.json();
+            data.overview = englishData.overview || "Sinopsis untuk film ini belum tersedia.";
+        }
         const finalContent = { ...data, type: contentType };
         updateMetaTags(finalContent);
         displayHeroDetail(finalContent);
@@ -104,10 +108,36 @@ async function loadDetailPage() {
 function displayHeroDetail(content) {
     const title = content.title || content.name;
     const releaseDate = content.release_date || content.first_air_date;
-    const formattedDate = releaseDate ? new Date(releaseDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : 'N/A';
-    const runtimeInfo = content.type === 'tv' ? (content.number_of_seasons ? `${content.number_of_seasons} Seasons` : 'Info N/A') : (content.runtime ? `${Math.floor(content.runtime / 60)}h ${content.runtime % 60}m` : 'Info N/A');
+    const formattedDate = releaseDate ? new Date(releaseDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'numeric', year: 'numeric' }) : 'N/A';
+    const runtimeInfo = content.type === 'tv' ? (content.number_of_seasons ? `${content.number_of_seasons} Seasons` : 'Info N/A') : (content.runtime ? `${Math.floor(content.runtime / 60)}h ${content.runtime % 60}m` : 'N/A');
     const isInWatchlist = getWatchlist().includes(content.id.toString());
-    movieDetailHero.innerHTML = `<div class="poster-box"><img src="${IMG_URL + content.poster_path}" alt="${title}"></div><div class="detail-box"><h1>${title}</h1><div class="meta-info"><span><i class="fas fa-calendar-alt"></i> ${formattedDate}</span><span><i class="fas fa-star"></i> ${content.vote_average.toFixed(1)}</span><span><i class="fas fa-clock"></i> ${runtimeInfo}</span></div><div class="genres">${content.genres.map(g => `<span class="genre-tag">${g.name}</span>`).join('')}</div><p class="overview">${content.overview}</p><div class="action-buttons"><a href="#" class="action-btn play-btn" id="play-btn" data-id="${content.id}" data-type="${content.type}"><i class="fas fa-play"></i> Play</a><a href="#" class="action-btn watchlist-btn ${isInWatchlist ? 'active' : ''}" id="watchlist-btn" data-content-id="${content.id}"><i class="fas ${isInWatchlist ? 'fa-check' : 'fa-plus'}"></i> ${isInWatchlist ? 'In Watchlist' : 'Add to watchlist'}</a><a href="download.html?id=${content.id}&type=${content.type}" class="action-btn download-btn"><i class="fas fa-download"></i></a></div></div>`;
+    let titleHTML;
+    const englishLogo = content.images?.logos?.find(logo => logo.iso_639_1 === 'en');
+    if (englishLogo) {
+        titleHTML = `<div class="title-logo"><img src="${LOGO_URL + englishLogo.file_path}" alt="${title} Logo"></div>`;
+    } else {
+        titleHTML = `<h1 class="fallback-title">${title}</h1>`;
+    }
+    movieDetailHero.innerHTML = `
+        <div class="poster-box"><img src="${IMG_URL + content.poster_path}" alt="${title}"></div>
+        <div class="detail-box">
+            ${titleHTML}
+            <div class="meta-info">
+                <span><i class="fas fa-calendar-alt"></i> ${formattedDate}</span>
+                <span><i class="fas fa-star"></i> ${content.vote_average.toFixed(1)}</span>
+                ${runtimeInfo ? `<span><i class="fas fa-clock"></i> ${runtimeInfo}</span>` : ''}
+            </div>
+            <div class="genres">${content.genres.map(g => `<span class="genre-tag">${g.name}</span>`).join('')}</div>
+            <p class="overview">${content.overview}</p>
+            <div class="action-buttons">
+                <a href="#" class="action-btn play-btn" id="play-btn" data-id="${content.id}" data-type="${content.type}"><i class="fas fa-play"></i></a>
+                <a href="#" class="action-btn watchlist-btn ${isInWatchlist ? 'active' : ''}" id="watchlist-btn" data-content-id="${content.id}">
+                    <i class="fas fa-plus"></i> Add to watchlist
+                </a>
+                <a href="download.html?id=${content.id}&type=${content.type}" class="action-btn download-btn"><i class="fas fa-download"></i></a>
+            </div>
+        </div>
+    `;
     document.getElementById('play-btn').addEventListener('click', handlePlayClick);
     document.getElementById('watchlist-btn').addEventListener('click', handleWatchlistClick);
 }
