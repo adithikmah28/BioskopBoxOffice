@@ -14,10 +14,6 @@ const ADSTERRA_DIRECT_LINKS = [
 ];
 const COUNTDOWN_SECONDS = 3;
 
-const customData = {
-    '624566': { videoUrl: '...' }
-};
-
 const movieDetailHero = document.getElementById('movie-detail-hero');
 const detailMainContent = document.getElementById('detail-main-content');
 const videoModal = document.getElementById('video-modal');
@@ -112,7 +108,7 @@ function displayHeroDetail(content) {
     const title = content.title || content.name;
     const releaseDate = content.release_date || content.first_air_date;
     const formattedDate = releaseDate ? new Date(releaseDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'numeric', year: 'numeric' }) : 'N/A';
-    const runtimeInfo = content.type === 'tv' ? (content.number_of_seasons ? `${content.number_of_seasons} Seasons` : 'Info N/A') : (content.runtime ? `${Math.floor(content.runtime / 60)}h ${content.runtime % 60}m` : 'N/A');
+    const runtimeInfo = content.type === 'tv' ? (content.number_of_seasons ? `${content.number_of_seasons} Seasons` : 'Info N/A') : (content.runtime ? `${Math.floor(content.runtime / 60)}h ${content.runtime % 60}m` : 'Info N/A');
     const isInWatchlist = getWatchlist().includes(content.id.toString());
     let titleHTML;
     const englishLogo = content.images?.logos?.find(logo => logo.iso_639_1 === 'en');
