@@ -58,12 +58,8 @@ function displayContent(content, container, defaultType = 'movie') {
 function initializeSwipers() {
     document.querySelectorAll('.swiper-container').forEach(container => {
         new Swiper(container, {
-            slidesPerView: 'auto',
-            spaceBetween: 15,
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
+            slidesPerView: 'auto', spaceBetween: 15,
+            navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
             breakpoints: {
                 320: { slidesPerView: 2, spaceBetween: 10 },
                 480: { slidesPerView: 3, spaceBetween: 10 },
@@ -85,26 +81,18 @@ async function handleSearch(e) {
         document.querySelector('.search-helper-message').style.display = 'none';
         categoryTitle.textContent = `Hasil Pencarian untuk: "${searchTerm}"`;
         const searchResults = await fetchAPI(API_ENDPOINTS.multiSearch + encodeURIComponent(searchTerm));
-        
-        // Hasil pencarian tidak akan jadi slider, jadi kita butuh kontainer biasa
-        const searchGrid = document.querySelector('#trending-grid').parentElement;
-        searchGrid.classList.remove('swiper-container');
-        searchGrid.querySelector('.swiper-wrapper').classList.add('movie-grid');
-        searchGrid.querySelector('.swiper-wrapper').classList.remove('swiper-wrapper');
-        searchGrid.querySelector('.swiper-button-next').style.display = 'none';
-        searchGrid.querySelector('.swiper-button-prev').style.display = 'none';
-
+        const searchContainer = trendingGrid.parentElement;
+        searchContainer.className = 'movie-grid'; // Hapus swiper, jadikan grid
         if (searchResults && searchResults.length > 0) {
-            displayContentAsGrid(searchResults, document.querySelector('.movie-grid'));
+            displayContentAsGrid(searchResults, searchContainer);
         } else {
-            document.querySelector('.movie-grid').innerHTML = `<p style="color: #ccc; font-size: 1.2rem;">Tidak ada hasil ditemukan.</p>`;
+            searchContainer.innerHTML = `<p style="color: #ccc; font-size: 1.2rem;">Tidak ada hasil ditemukan.</p>`;
         }
     } else {
-        window.location.reload(); // Cara paling mudah untuk reset
+        window.location.reload();
     }
 }
 
-// Fungsi baru untuk hasil pencarian (non-slider)
 function displayContentAsGrid(content, container, defaultType = 'movie') {
     container.innerHTML = '';
     content.forEach(item => {
@@ -113,7 +101,6 @@ function displayContentAsGrid(content, container, defaultType = 'movie') {
             const itemLink = document.createElement('a');
             itemLink.href = `detail.html?id=${item.id}&type=${type}`;
             itemLink.classList.add('movie-card');
-            itemLink.style.height = 'auto'; // Override tinggi slider
             const title = item.title || item.name;
             const releaseDate = item.release_date || item.first_air_date;
             const year = releaseDate ? `(${new Date(releaseDate).getFullYear()})` : '';
@@ -125,10 +112,8 @@ function displayContentAsGrid(content, container, defaultType = 'movie') {
 
 async function loadInitialData() {
     const [trendingMovies, indonesianMovies, popularTV, popularMovies, topRatedMovies] = await Promise.all([
-        fetchAPI(API_ENDPOINTS.trendingMovies), 
-        fetchAPI(API_ENDPOINTS.indonesianMovies),
-        fetchAPI(API_ENDPOINTS.popularTV),
-        fetchAPI(API_ENDPOINTS.popularMovies),
+        fetchAPI(API_ENDPOINTS.trendingMovies), fetchAPI(API_ENDPOINTS.indonesianMovies),
+        fetchAPI(API_ENDPOINTS.popularTV), fetchAPI(API_ENDPOINTS.popularMovies),
         fetchAPI(API_ENDPOINTS.topRatedMovies)
     ]);
     displayContent(trendingMovies, trendingGrid, 'movie');
@@ -143,7 +128,32 @@ hamburgerMenu.addEventListener('click', () => { navWrapper.classList.toggle('act
 requestMovieBtn.addEventListener('click', () => { requestModal.style.display = 'flex'; });
 closeRequestModalBtn.addEventListener('click', () => { requestModal.style.display = 'none'; });
 requestModal.addEventListener('click', (e) => { if (e.target === requestModal) { requestModal.style.display = 'none'; } });
-requestForm.addEventListener('submit', async function(event) { /* ... (fungsi ini sama) ... */ });
+requestForm.addEventListener('submit', async function(event) {
+    event.preventDefault();
+    const form = event.target;
+    const data = new FormData(form);
+    const submitButton = form.querySelector('button');
+    formStatus.textContent = 'Mengirim...';
+    formStatus.className = '';
+    submitButton.disabled = true;
+    try {
+        const response = await fetch(form.action, { method: form.method, body: data, headers: { 'Accept': 'application/json' } });
+        if (response.ok) {
+            formStatus.textContent = "Terima kasih! Request Anda telah terkirim.";
+            formStatus.classList.add('success');
+            form.reset();
+        } else {
+            formStatus.textContent = "Oops! Terjadi kesalahan saat mengirim formulir.";
+            formStatus.classList.add('error');
+        }
+    } catch (error) {
+        formStatus.textContent = "Oops! Terjadi kesalahan jaringan.";
+        formStatus.classList.add('error');
+    } finally {
+        submitButton.disabled = false;
+        setTimeout(() => { formStatus.textContent = ''; formStatus.className = ''; }, 5000);
+    }
+});
 searchForm.addEventListener('submit', handleSearch);
 document.addEventListener('DOMContentLoaded', loadInitialData);
 requestForm.action = 'https://formspree.io/f/xxxxxxxx';
